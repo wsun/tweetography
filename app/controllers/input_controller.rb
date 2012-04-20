@@ -1,18 +1,24 @@
+require 'csv'
+
 class InputController < ApplicationController
   def home
   end
 
   def visualize
-    keyword = params[:keyword]
-    loc = false
-    geo = ''
 
-    unless params[:keyword].present?
+    # prevent indirect means of arriving here
+    unless params[:keyword].present? or params[:city].present? or
+           params[:radius].present? or not params[:keyword].empty?
       respond_to do |format|
         format.html { redirect_to root_path, 
                       alert: 'Please enter search keyword.' }
       end
+      return
     end
+
+    keyword = params[:keyword]
+    loc = false
+    geo = ''
 
     # OAuth
     Twitter.configure do |config|
@@ -22,14 +28,14 @@ class InputController < ApplicationController
       config.oauth_token_secret = 'Ofa4sOJil0e26kcPxu6dAu7WcU1I7GrdLLiqpCpa0g'
     end
 
-
-    # geocode the city parameter
-    if params[:city].present?
+    # geocode the city parameter, using default 100 mi radius if none provided
+    unless params[:city].empty?
       center = Geocoder.search(params[:city]).first
       unless center.nil?
         loc = true
-        if params[:radius].present?
-          geo = "#{center.latitude.to_s}, #{center.longitude.to_s}, #{params[:radius].to_s}mi"
+        unless params[:radius].empty? or params[:radius].to_i < 0
+          rad = params[:radius].to_i
+          geo = "#{center.latitude.to_s}, #{center.longitude.to_s}, #{rad.to_s}mi"
         else
           geo = "#{center.latitude.to_s}, #{center.longitude.to_s}, 100mi"
         end
@@ -41,9 +47,10 @@ class InputController < ApplicationController
     1.upto(15) do |i|
       q = []
       if loc
-        q.concat(Twitter.search(keyword, geocode: geo, rpp: 5, page: i))
+        q.concat(Twitter.search(keyword, geocode: geo, 
+                                         lang: 'en', rpp: 3, page: i))
       else
-        q.concat(Twitter.search(keyword, rpp: 5, page: i))
+        q.concat(Twitter.search(keyword, lang: 'en', rpp: 3, page: i))
       end
       if q.empty?
         break
@@ -57,6 +64,7 @@ class InputController < ApplicationController
         format.html { redirect_to root_path, 
                       alert: 'Please retry, no results were found.' }
       end
+      return
     end
 
 
@@ -88,6 +96,8 @@ class InputController < ApplicationController
     0.upto(total - 1) do |i|
       result = results[i]
 
+      user = Twitter.user(result.from_user_id)
+
       # determine tweet location, if none, kick it out
       loc = result.geo
       lat = ''
@@ -105,8 +115,6 @@ class InputController < ApplicationController
         lon = loc.longitude
       end
 
-      user = Twitter.user(result.from_user_id)
-
       current = []
       current.push(result.created_at)
       current.push(result.from_user)
@@ -120,7 +128,10 @@ class InputController < ApplicationController
       current.push(user.followers_count)
       current.push(user.friends_count)
 
-      current.push(/&gt;(.*)&lt;/.match(result.source)[1])
+      # extract out the name of the source of the tweet
+      source = /&gt;(.*)&lt;/.match(result.source)[1]
+      source = source.gsub(/[^0-9A-Za-z]/, '')
+      current.push(source)
 
       current.push(lat)
       current.push(lon)
@@ -129,12 +140,12 @@ class InputController < ApplicationController
       final.push(current)
     end
 
-    # write CSV file
+    # write CSV file to the public directory
     directory = 'public/'
     @unique = rand(1..2**32)
     name = @unique.to_s
     path = File.join( directory, name )
-    CSV.open('path' + '.csv', 'wb') do |csv|
+    CSV.open(path + '.csv', 'wb') do |csv|
       final.each do |row|
         csv << row
       end
