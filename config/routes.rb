@@ -1,4 +1,11 @@
 Tweetography::Application.routes.draw do
+  
+  # home page
+  root :to => 'input#home'
+
+  # routes
+  match '/visualize' => 'input#visualize', :as => :visualize
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
