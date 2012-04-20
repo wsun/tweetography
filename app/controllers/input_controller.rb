@@ -1,4 +1,5 @@
 require 'csv'
+require 'random'
 
 class InputController < ApplicationController
   def home
@@ -32,6 +33,17 @@ class InputController < ApplicationController
           geo = "#{center.latitude.to_s}, #{center.longitude.to_s}, 100mi"
         end
       end
+    end
+
+
+    # OAuth
+    Twitter.configure do |config|
+      config.consumer_key = 'W3mRvrBAYvTV1840W7w6w'
+      config.consumer_secret = 'QzmwtlyCfffIiEio9TK6WJfK2RuxL0vn3UBvugs9Eo'
+      config.oauth_token = '318868789-Eho05NqG1ZCEajYk7d9gU61xqk9AVbZAQqZKlwqI'
+      config.oauth_token_secret = 'Ofa4sOJil0e26kcPxu6dAu7WcU1I7GrdLLiqpCpa0g'
+      config.search_endpoint = 'http://twitter-search-api-tweetography.apigee.com'
+      config.endpoint = 'http://twitter-api-tweetography.apigee.com'
     end
     
     # make the query
@@ -134,7 +146,10 @@ class InputController < ApplicationController
 
     # write CSV file to the public directory
     directory = 'public/'
-    @unique = rand(1..(2**32))
+
+    prng = Random.new
+
+    @unique = prng.rand(1..(2**32))
     name = @unique.to_s
     path = File.join( directory, name )
     CSV.open(path + '.csv', 'wb') do |csv|
