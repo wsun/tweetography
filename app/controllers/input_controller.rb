@@ -46,13 +46,13 @@ class InputController < ApplicationController
 
     # make the query
     results = []
-    1.upto(2) do |i|
+    1.upto(15) do |i|
       q = []
       if loc
         q.concat(Twitter.search(keyword, geocode: geo, 
-                                         lang: 'en', rpp: 50, page: i))
+                                         lang: 'en', rpp: 100, page: i))
       else
-        q.concat(Twitter.search(keyword, lang: 'en', rpp: 50, page: i))
+        q.concat(Twitter.search(keyword, lang: 'en', rpp: 100, page: i))
       end
       if q.empty?
         break
@@ -131,9 +131,11 @@ class InputController < ApplicationController
       current.push(user.friends_count)
 
       # extract out the name of the source of the tweet
-      source = /&gt;(.*)&lt;/.match(result.source)[1]
-      source = source.gsub(/[^0-9A-Za-z]/, '')
-      current.push(source)
+      source = /&gt;(.*)&lt;/.match(result.source)
+      unless source.nil?
+        source = source[1].gsub(/[^0-9A-Za-z]/, '')
+        current.push(source)
+      end
 
       current.push(lat)
       current.push(lon)
@@ -168,8 +170,5 @@ class InputController < ApplicationController
   end
 
   def about
-  end
-
-  def contact
   end
 end

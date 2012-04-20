@@ -6,6 +6,7 @@ Tweetography::Application.routes.draw do
   # routes
   match '/visualize' => 'input#visualize', :as => :visualize
   match '/sample' => 'input#sample', :as => :sample
+  match '/about' => 'input#about', :as => :about
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

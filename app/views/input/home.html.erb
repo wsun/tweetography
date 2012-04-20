@@ -1,6 +1,10 @@
+<div class="hero-unit">
+    <h1>Visualize some tweets.</h1>
+</div>
+
 <%= form_tag(visualize_path, class: "form-horizontal",
                              autocomplete: "off" ) do %>
-    <legend>Search for some tweets!</legend>    
+    <legend></legend>    
 
     <% unless alert.nil? %>
         <div class="alert alert-error fade in">
@@ -14,6 +18,7 @@
         <%= label_tag 'keyword', nil, class: "control-label" %>
         <div class="controls">
             <%= text_field_tag 'keyword', nil %>
+            <p class="help-block" id="req">(required)</p>
         </div>    
     </div>
     <div class="control-group">
