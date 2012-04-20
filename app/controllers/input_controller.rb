@@ -20,14 +20,6 @@ class InputController < ApplicationController
     loc = false
     geo = ''
 
-    # OAuth
-    Twitter.configure do |config|
-      config.consumer_key = 'W3mRvrBAYvTV1840W7w6w'
-      config.consumer_secret = 'QzmwtlyCfffIiEio9TK6WJfK2RuxL0vn3UBvugs9Eo'
-      config.oauth_token = '318868789-Eho05NqG1ZCEajYk7d9gU61xqk9AVbZAQqZKlwqI'
-      config.oauth_token_secret = 'Ofa4sOJil0e26kcPxu6dAu7WcU1I7GrdLLiqpCpa0g'
-    end
-
     # geocode the city parameter, using default 100 mi radius if none provided
     unless params[:city].empty?
       center = Geocoder.search(params[:city]).first
