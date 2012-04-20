@@ -1,0 +1,30 @@
+Overview:
+This app is a combination of Ruby on Rails and Processing. Though it has already been pushed online (http://www.tweetography.com) via Heroku deployment, server limitations essentially prevent any real-time querying from occurring, since it takes longer than the 30 s timeout threshold. As a result, the online version can merely display the sample visualization we have provided. With that said, it is possible to run the entire website on a local machine, by using the 'rails server' command; this allows for search capabilities to be fully demonstrated.
+
+Setup:
+Ruby 1.9.3p125 / Rails 3.2.3
+- install necessary packages (gcc, git, etc)
+- install ruby version manager (rvm)
+- install the latest version of ruby with rvm (*this is critical)
+- install ruby gems
+- install rails
+- within the project directory, run 'bundle install' to install any necessary gems
+- run 'rails s' to fire up an instance of the server
+- navigate to http://localhost:3000
+
+Structure:
+Overall, the app hinges on two primary capabilities:
+	(1) data collection through Ruby and APIs
+	(2) visualization through Processing
+
+The Ruby/Rails app is fairly simple. A basic search form allows users to search for tweets by keyword and near a location. The main code for this lies in 'input#visualize' (in the input_controller). A series of steps takes place:
+	(1) Location input is converted to lat/lon for Twitter API call via Ruby Geocoder
+	(2) Twitter search API returns a list of tweet objects
+	(3) Tweets can be geocoded and come with lat/lon, but the large majority of them do not; we then try to use user-reported location to query via Ruby Geocoder to ascertain location coordinates. If no location can be found, the tweet is thrown out.
+	(4) Mood of the user is analyzed through calls to the Twitter Sentiment API, which measures tweets on a 0,2,4 scale from sad to happy. 
+	(5) Additional information, like tweet source, number of followers of a user, etc are also collected
+	(6) A unique CSV file is created, and this parameter is passed to the visualization
+
+The Processing code is relatively self-contained; it currently all resides in the finalProject.zip folder in this directory. We had difficulties making sure all of our jar files were given correct permissions; our code repository is over 200 mb, so even the applet was 25 mb. As a result, at the time of submission, we were unable to hook up the applet to our website. The only additional work that needs to be done, once the applet permissions are sufficient for Java to run, is to copy in the html for the applet (into the sample.html.erb and visualize.html.erb files) and write the following line of code:
+	<param name="file" VALUE=<%= @unique %>>
+This will allow the Processing visualization to take in a parameter of @unique (which is the name of the csv file to load). We will hook this up as soon as we can, in the meantime, the Processing visualization is complete and currently running on a sample data set.
