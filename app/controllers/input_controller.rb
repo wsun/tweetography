@@ -134,7 +134,7 @@ class InputController < ApplicationController
 
     # write CSV file to the public directory
     directory = 'public/'
-    @unique = rand(1..2**32)
+    @unique = rand(1..(2**32))
     name = @unique.to_s
     path = File.join( directory, name )
     CSV.open(path + '.csv', 'wb') do |csv|
