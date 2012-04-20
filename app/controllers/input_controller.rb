@@ -1,12 +1,10 @@
 require 'csv'
-require 'random'
 
 class InputController < ApplicationController
   def home
   end
 
   def visualize
-
     # prevent indirect means of arriving here
     unless params[:keyword].present? or params[:city].present? or
            params[:radius].present? or not params[:keyword].empty?
@@ -28,9 +26,9 @@ class InputController < ApplicationController
         loc = true
         unless params[:radius].empty? or params[:radius].to_i < 0
           rad = params[:radius].to_i
-          geo = "#{center.latitude.to_s}, #{center.longitude.to_s}, #{rad.to_s}mi"
+          geo = "#{center.latitude.to_s},#{center.longitude.to_s},#{rad.to_s}mi"
         else
-          geo = "#{center.latitude.to_s}, #{center.longitude.to_s}, 100mi"
+          geo = "#{center.latitude.to_s},#{center.longitude.to_s},100mi"
         end
       end
     end
@@ -38,23 +36,23 @@ class InputController < ApplicationController
 
     # OAuth
     Twitter.configure do |config|
-      config.consumer_key = 'W3mRvrBAYvTV1840W7w6w'
-      config.consumer_secret = 'QzmwtlyCfffIiEio9TK6WJfK2RuxL0vn3UBvugs9Eo'
-      config.oauth_token = '318868789-Eho05NqG1ZCEajYk7d9gU61xqk9AVbZAQqZKlwqI'
-      config.oauth_token_secret = 'Ofa4sOJil0e26kcPxu6dAu7WcU1I7GrdLLiqpCpa0g'
+    #  config.consumer_key = 'W3mRvrBAYvTV1840W7w6w'
+    #  config.consumer_secret = 'QzmwtlyCfffIiEio9TK6WJfK2RuxL0vn3UBvugs9Eo'
+    #  config.oauth_token = '318868789-Eho05NqG1ZCEajYk7d9gU61xqk9AVbZAQqZKlwqI'
+    #  config.oauth_token_secret = 'Ofa4sOJil0e26kcPxu6dAu7WcU1I7GrdLLiqpCpa0g'
       config.search_endpoint = 'http://twitter-search-api-tweetography.apigee.com'
       config.endpoint = 'http://twitter-api-tweetography.apigee.com'
     end
-    
+
     # make the query
     results = []
-    1.upto(15) do |i|
+    1.upto(2) do |i|
       q = []
       if loc
         q.concat(Twitter.search(keyword, geocode: geo, 
-                                         lang: 'en', rpp: 3, page: i))
+                                         lang: 'en', rpp: 50, page: i))
       else
-        q.concat(Twitter.search(keyword, lang: 'en', rpp: 3, page: i))
+        q.concat(Twitter.search(keyword, lang: 'en', rpp: 50, page: i))
       end
       if q.empty?
         break
@@ -162,5 +160,16 @@ class InputController < ApplicationController
     respond_to do |format|
       format.html # visualize.html.erb
     end
+  end
+
+
+  def sample
+    @unique = 'sample'
+  end
+
+  def about
+  end
+
+  def contact
   end
 end

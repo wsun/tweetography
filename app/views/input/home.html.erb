@@ -1,10 +1,13 @@
-<%= form_tag(visualize_path, class: "form-horizontal") do %>
+<%= form_tag(visualize_path, class: "form-horizontal",
+                             autocomplete: "off" ) do %>
     <legend>Search for some tweets!</legend>    
 
     <% unless alert.nil? %>
-    <div class="alert alert-error">
-        <%= alert %>
-    </div>
+        <div class="alert alert-error fade in">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <%= alert %>
+            <script>$(".alert").alert()</script>
+        </div>
     <% end %>
 
     <div class="control-group">
@@ -23,15 +26,32 @@
     <div class="control-group">
         <%= label_tag 'radius', nil, class: "control-label" %>
         <div class="controls">
-            <%= number_field_tag 'radius', nil, min: 0 %>
+            <div class="input-append">
+                <%= number_field_tag 'radius', nil, min: 0 %>
+                <span class="add-on">mi</span>
+            </div>
             <p class="help-block">Radius around city in miles</p>
         </div>
-    </div>
+    </div> 
     <div class="form-actions">
-        <button name="commit", type="submit", class="btn btn-primary">
+        <button name="commit", type="submit", id="submit",
+                class="btn btn-primary", data-loading-text="Searching...">
             <i class="icon-search icon-white"></i>
             Search
         </button>
+         <%= link_to "Sample", sample_path, class: "btn btn-success", 
+                id: "sample", 
+                "data-title" => "A Sample Visualization",
+                "data-content" => "Explore a set of Harvard-related tweets!",
+                rel: "popover" %>
+        <script>
+            $("a[rel=popover]").popover();
+            $("#submit").button();
+            $('#submit').on('click', function () {
+                 $(this).button('loading');
+            });
+
+        </script>
     </div>
 <% end %>
 
