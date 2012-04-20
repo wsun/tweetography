@@ -2,21 +2,21 @@ module Tweetography
   class Application < Rails::Application
     config.to_prepare do
       # Apigee
-      '''
-      if ENV['APIGEE_TWITTER_API_ENDPOINT']
-        @@twitter_api = ENV['APIGEE_TWITTER_API_ENDPOINT']
-   	  else
+      
+    #  if ENV['APIGEE_TWITTER_API_ENDPOINT']
+    #    @@twitter_api = ENV['APIGEE_TWITTER_API_ENDPOINT']
+   	#  else
         # Get this value from Heroku.
         # Once you have enabled the addon, boot up the 'heroku console' and run the following:
         # puts ENV['APIGEE_TWITTER_API_ENDPOINT']
         # this will spit out your correct api endpoint
 
-        @@twitter_api = "twitter-api-tweetography.apigee.com"
-      end
+    #    @@twitter_api = "twitter-api-tweetography.apigee.com"
+    #  end
 
 	  # build the endpoint based on the add-on supplied configvar
-	  @endpoint = 'http://' + @@twitter_api
-	  '''
+	#  @endpoint = 'http://' + @@twitter_api
+	  
 
       # OAuth
       Twitter.configure do |config|
