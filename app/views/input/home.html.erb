@@ -1,2 +1,30 @@
-<h1>Input#home</h1>
-<p>Find me in app/views/input/home.html.erb</p>
+<%= form_tag(search_path, class: "form-horizontal") do %>
+    <legend>Search for some tweets!</legend>    
+    <div class="control-group">
+        <%= label_tag 'keyword', nil, class: "control-label" %>
+        <div class="controls">
+            <%= text_field_tag 'keyword', nil %>
+        </div>    
+    </div>
+    <div class="control-group">
+        <%= label_tag 'city', nil, class: "control-label" %>
+        <div class="controls">
+            <%= text_field_tag 'city', nil %>
+            <p class="help-block">Enter in city to focus search on</p>
+        </div>    
+    </div>
+    <div class="control-group">
+        <%= label_tag 'radius', nil, class: "control-label" %>
+        <div class="controls">
+            <%= number_field_tag 'radius', nil, min: 0 %>
+            <p class="help-block">Radius around city in miles</p>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button name="commit", type="submit", class="btn btn-primary">
+            <i class="icon-search icon-white"></i>
+            Search
+        </button>
+    </div>
+<% end %>
+
