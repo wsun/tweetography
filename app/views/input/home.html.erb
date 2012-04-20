@@ -1,5 +1,23 @@
-<%= form_tag(search_path, class: "form-horizontal") do %>
+<%= form_tag(visualize_path, class: "form-horizontal") do %>
     <legend>Search for some tweets!</legend>    
+
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+    <div class="alert alert-error">
+        <%= alert %>
+    </div>
+
     <div class="control-group">
         <%= label_tag 'keyword', nil, class: "control-label" %>
         <div class="controls">
