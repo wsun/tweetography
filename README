@@ -12,6 +12,12 @@ Ruby 1.9.3p125 / Rails 3.2.3
 - run 'rails s' to fire up an instance of the server
 - navigate to http://localhost:3000
 
+Processing
+- extract the 4 library files in the 'libraries.zip' folder to
+/Username/Documents/Processing/libraries or c:/My Documents/Processing (on PC, you might need to make a new folder)
+- load finalProject.pde 
+- run
+
 Structure:
 Overall, the app hinges on two primary capabilities:
 	(1) data collection through Ruby and APIs
