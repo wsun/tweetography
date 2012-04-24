@@ -135,16 +135,16 @@ void draw() {
      float sumFollowers = 0;
      float sumFriends = 0;
      float sumMood = 0;
-     for(City c:cities) {
+     for(City c : selectedCities) {
        sumStatuses += c.statuses;
        sumFollowers += c.followers;
        sumFriends += c.friends;
        sumMood += c.mood;
      }
-     sumStatuses = sumStatuses/cities.size();
-     sumFollowers = sumFollowers/cities.size();
-     sumFriends = sumFriends/cities.size();
-     sumMood = sumMood/cities.size();
+     sumStatuses = sumStatuses/selectedCities.length;
+     sumFollowers = sumFollowers/selectedCities.length;
+     sumFriends = sumFriends/selectedCities.length;
+     sumMood = sumMood/selectedCities.length;
      
      textSize(20);
      fill(#FFFFFF);
@@ -327,7 +327,7 @@ void Mood() {
 void getWordCram() {
   // append strings
   String[] tweets = new String[0];
-  for (City c: cities)
+  for (City c: selectedCities)
     tweets = append(tweets, c.tweet);  
   bigString = join(tweets, ","); 
   background(0);
