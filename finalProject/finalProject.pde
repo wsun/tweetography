@@ -259,7 +259,7 @@ void Analyze() {
     fill(#FFFFFF);
     textFont(italics);
     textSize(15);
-    text("please select some tweets", 10, 150);
+    text("please select some tweets", 20, 200);
   }
 }
 
