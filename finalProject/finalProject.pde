@@ -1,20 +1,27 @@
+/* OpenProcessing Tweak of *@*http://www.openprocessing.org/sketch/62695*@* */
+/* !do not delete the line above, required for linking your tweak if you re-upload */
+
 // tweetography beta: mapping you and your world
 
-import processing.opengl.*;
-
-import codeanticode.glgraphics.*;
+import de.fhpotsdam.unfolding.mapdisplay.*;
+import de.fhpotsdam.unfolding.utils.*;
+import de.fhpotsdam.unfolding.marker.*;
+import de.fhpotsdam.unfolding.tiles.*;
+import de.fhpotsdam.unfolding.interactions.*;
 import de.fhpotsdam.unfolding.*;
 import de.fhpotsdam.unfolding.core.*;
 import de.fhpotsdam.unfolding.geo.*;
-import de.fhpotsdam.unfolding.utils.*;
+import de.fhpotsdam.unfolding.events.*;
+import de.fhpotsdam.utils.*;
 import de.fhpotsdam.unfolding.providers.*;
-import de.fhpotsdam.unfolding.mapdisplay.AbstractMapDisplay;
-import de.fhpotsdam.unfolding.tiles.MBTilesLoaderUtils;
-import de.fhpotsdam.unfolding.geo.MercatorProjection;
+
+//import processing.opengl.*; 
+import codeanticode.glgraphics.*;
+
 import wordcram.*;
 import wordcram.text.*;
 import controlP5.*;
-PFont plain, italics;
+PFont plain, italics, bold;
 
 de.fhpotsdam.unfolding.Map map;
 
@@ -30,9 +37,11 @@ WordCram wordCram;
 String bigString;
 boolean analyze = false;
 boolean time = false;
+boolean test = false;
 int[] button = new int[4];
 int counter = 1;
-MultiList the_list;
+boolean pressed = false;
+color newCol = #00688B;
 
 // selection tool variables
 int sizeSelection = 50;
@@ -41,6 +50,9 @@ void setup() {
   background(0);
   plain = loadFont("plain.vlw");
   italics = loadFont("italic.vlw");
+  bold = loadFont("bold.vlw");
+  
+  
   // add controlP5 interface
   controlP5 = new ControlP5(this);
   controlP5.addButton("Home", 10, 10, 20, 80, 19); 
@@ -49,8 +61,20 @@ void setup() {
   controlP5.addButton("Mood", 10, 10, 140, 80, 19); 
   
   // plot size
-  size(1400, 800);
-  map = new de.fhpotsdam.unfolding.Map(this, 0, 0, width, height, new customMBTilesMapProvider("jdbc:sqlite:" + dataPath("tiles/control-room.mbtiles") + "")); 
+  size(970, 768);
+  smooth();
+  
+  //map
+  map = new de.fhpotsdam.unfolding.Map(this, new OpenStreetMap.CloudmadeProvider("6af2f3a3e8bc4a5f88c86b72c8246476", 63568));
+  //map = new de.fhpotsdam.unfolding.Map(this, 0, 0, width, height, new customMBTilesMapProvider("jdbc:sqlite:" + dataPath("tiles/control-room.mbtiles") + ""));
+  //map = new de.fhpotsdam.unfolding.Map(this, 0, 0, width, height, new MapBox.ControlRoomProvider());
+  
+  
+  Location centerLocation = new Location(40, 10);
+  map.zoomAndPanTo(centerLocation, 2);
+  MapUtils.createDefaultEventDispatcher(this, map);
+  
+  // adjustments
   plot_x1 = 0;
   plot_x2 = 1400;
   plot_y1 = 0;
@@ -59,13 +83,11 @@ void setup() {
   button[1] = plot_y2 - 70;
   button[2] = plot_x2 + 260;
   button[3] = plot_y2;
-  map.setTweening(true);
-  Location centerLocation = new Location(40, 10);
-  map.zoomAndPanTo(centerLocation, 2);
-  MapUtils.createDefaultEventDispatcher(this, map);
-
+  
+  
   // filling the screen a bit.
   for (City c:loadCitiesFromCsv("cities/us.csv")) {
+    smooth();
     cities.add(c);
   }
   noStroke();
@@ -73,105 +95,102 @@ void setup() {
 
 void draw() {
   
-  if (analyze == false) {
-    map.draw();
-    title();
-    legend();
-    if (time == false) {
-      for (City c:cities) {
-        c.tick();
-        float xy[] = map.getScreenPositionFromLocation(new Location(c.lat, c.lng));
-        float x = xy[0];
-        float y = xy[1];
-        float markerRadius = constrain(map.getZoom()/10, 1, 20) * 4;
-      }
-      selectionCircle();
+  if (analyze == true) {
+    if (wordCram.hasMore()) {
+      wordCram.drawNext();
     }
     else {
-      calendar();
-      aggregate = (City[]) append(aggregate, cities.get(cities.size()-counter));
-      for (City c:aggregate) {
-        c.col = #FFFFFF;
-        c.tick();
-      }
-      City c = cities.get(cities.size()-counter);
-      float xy[] = map.getScreenPositionFromLocation(new Location(c.lat, c.lng));
-      float x = xy[0];
-      float y = xy[1];
-      fill(#FF6600, 150);
-      noStroke();
-      ellipse(x, y, 20, 20);
-      fill(#FF6600);
-      textFont(plain);
-      String s = cities.get(cities.size()-counter).datetime;
-      int first = s.indexOf('/');
-      int next = s.lastIndexOf('/');
-      String the_month = getMonthForInt(int(s.substring(0, first)));
-      String the_day = s.substring(first+1, next);
-      String the_time = s.substring(next+4);     
-      textMode(CENTER);
-      textSize(20);
-      text(the_month + " " + the_day, width-160, 630);
-      fill(#FFFFFF);
-      text(the_time + " (24 hr)", width-173, 680);
-      
-      counter++;
-      if (counter > cities.size()) {
-        time = false;
-        counter = 0;
-      }
+    float sumStatuses = 0;
+    float sumFollowers = 0;
+    float sumFriends = 0;
+    float sumMood = 0;
+    for(City c:selectedCities) {
+      sumStatuses += c.statuses;
+      sumFollowers += c.followers;
+      sumFriends += c.friends;
+      sumMood += c.mood;
+    }
+    int l = selectedCities.length;
+    sumStatuses = sumStatuses/l;
+    sumFollowers = sumFollowers/l;
+    sumFriends = sumFriends/l;
+    sumMood = sumMood/l;
+    smooth();
+    textSize(20);
+    
+    rectMode(CORNER);
+    fill(50);
+    rect(0, 695, width, 200);
+    
+    fill(#FF6103);
+    int y = 725;
+    textAlign(CENTER);
+    smooth();
+    textFont(plain, 20);
+    text("Average no. of statuses", width/8, y);
+    text("Average no. of followers", 1.47*width/4, y);
+    text("Average no. of friends", 2.5*width/4, y);
+    text("Average mood (0-4)", 3.5*width/4, y);
+    
+    fill(180);
+    text(sumStatuses, width/8, y+30);
+    text(sumFollowers, 1.47*width/4, y+30);
+    text(sumFriends, 2.5*width/4, y+30);
+    text(sumMood, 3.5*width/4, y+30);
     }
   }
   else {
-    
-     // wordcram
-     
-     PImage title;
-     title = loadImage("cram.png");
-     image(title, 0, 0);
-     title();
-     // basicStats
-     float sumStatuses = 0;
-     float sumFollowers = 0;
-     float sumFriends = 0;
-     float sumMood = 0;
-     for(City c : selectedCities) {
-       sumStatuses += c.statuses;
-       sumFollowers += c.followers;
-       sumFriends += c.friends;
-       sumMood += c.mood;
-     }
-     sumStatuses = sumStatuses/selectedCities.length;
-     sumFollowers = sumFollowers/selectedCities.length;
-     sumFriends = sumFriends/selectedCities.length;
-     sumMood = sumMood/selectedCities.length;
-     
-     textSize(20);
-     fill(#FFFFFF);
-     int x = 157;
-     int y = 750;
-     text(sumStatuses, x-75, y);
-     text(sumFollowers, 3.3*x-75, y);
-     text(sumFriends, 5.7*x-75, y);
-     text(sumMood, 8*x-75, y);
-     
-     fill(#FF6103);
-     y = 725;
-     textMode(RIGHT);
-     text("Average no. of statuses", x-75, y);
-     text("Average no. of followers", 3.3*x-75, y);
-     text("Average no. of friends", 5.7*x-75, y);
-     text("Average mood (0-4)", 8*x-75, y);
-     
-     fill(#FF6103);
-     textMode(LEFT);
-     textSize(40);
-     y+=20;
-     text("*", x-105, y);
-     text("*", 3.3*x-105, y);
-     text("*", 5.7*x-105, y);
-     text("*", 8*x-105, y);
+  map.draw();
+  title();
+  legend();
+  
+  if (time == false) {
+    for (City c:cities) {
+      c.tick();
+      float xy[] = map.getScreenPositionFromLocation(new Location(c.lat, c.lng));
+      float x = xy[0];
+      float y = xy[1];
+      float markerRadius = constrain(map.getZoom()/10, 1, 20) * 4;
+    }
+    hover();
+    selectionCircle();
   }
+  else {
+    aggregate = (City[]) append(aggregate, cities.get(cities.size()-counter));
+    for (City c:aggregate) {
+      c.col = newCol;
+      c.tick();
+    }
+    City c = cities.get(cities.size()-counter);
+    float xy[] = map.getScreenPositionFromLocation(new Location(c.lat, c.lng));
+    float x = xy[0];
+    float y = xy[1];
+    fill(#FF6600, 150);
+    noStroke();
+    ellipse(x, y, 20, 20);
+    fill(#FF6600);
+    textFont(plain);
+    String s = cities.get(cities.size()-counter).datetime;
+    int first = s.indexOf('/');
+    int next = s.lastIndexOf('/');
+    String the_month = getMonthForInt(int(s.substring(0, first)));
+    String the_day = s.substring(first+1, next);
+    String the_time = s.substring(next+4);     
+    textAlign(RIGHT);
+    textSize(20);
+    text(the_month + " " + the_day, width-30, 710);
+    fill(0);
+    text(the_time + " (24 hr)", width-30, 740);
+    
+    counter++;
+    if (counter > cities.size()) {
+      time = false;
+      counter = 1;
+      aggregate = new City[0];
+    }
+  }
+  }
+ 
 }
 
 void keyPressed() {
@@ -185,10 +204,11 @@ void keyPressed() {
   }
   if (key == 'r') {
     selectedCities = new City[0];
+    time = false;
     Location centerLocation = new Location(40, 10);
     map.zoomAndPanTo(centerLocation, 2);
     for (City c:cities)
-      c.col = #FFFFFF;
+      c.col = newCol;
   } 
 }
 
@@ -219,7 +239,7 @@ void selectionCircle() {
       
       if (mouseX > 150 && mouseY > 150) {
         // draw bounding box
-        ellipseMode(CENTER); stroke(#FFFFFF); strokeWeight(1); fill(#FFFFFF, 50); smooth();
+        ellipseMode(CENTER); stroke(0); strokeWeight(1); fill(0, 50); smooth();
         ellipse(mouseX, mouseY, sizeSelection, sizeSelection);
       }
   } 
@@ -231,7 +251,7 @@ void mouseClicked() {
      // draw bounding box
       if (mouseX < 161 && mouseY < 156) {}
       else {
-        ellipseMode(CENTER); stroke(#FFFFFF); strokeWeight(1); fill(#FFFFFF, 50); smooth();
+        ellipseMode(CENTER); stroke(0); strokeWeight(1); fill(0, 50); smooth();
         ellipse(mouseX, mouseY, sizeSelection, sizeSelection);
       }
   }
@@ -247,52 +267,64 @@ void mouseClicked() {
   }
 } 
 
+void hover() {
+  for (City c:cities) {
+    float xy[] = map.getScreenPositionFromLocation(new Location(c.lat, c.lng));
+    float x = xy[0];
+    float y = xy[1];
+    if (near(x, y, sizeSelection)) {
+      textFont(plain, 15);
+      fill(0);
+      text(c.tweet, 75, 740);
+      textFont(plain, 12);
+      text("[ " + c.datetime + " ]", 75, 760);
+      
+      break;
+    }
+  }
+}
+
 void Analyze() {
-  float x = mouseX;
-  float y = mouseY;
   if (selectedCities.length != 0) {
     getWordCram();
-    background(#FFFFFF);
+    background(0);
+    smooth();
     analyze = true;
-  }
-  else {
-    fill(#FFFFFF);
-    textFont(italics);
-    textSize(15);
-    text("please select some tweets", 20, 200);
   }
 }
 
 void title() {
-  textMode(LEFT);
+  textAlign(LEFT);
   textFont(plain);
   textSize(70);
   fill(#FF6103);
-  if (!analyze) 
-    text("tweetography", width-width/3, 80);
+  if (!analyze) {
+    PImage logo = loadImage("logo.png");
+    image(logo, width-6.6*margin, 10, width/4, height/11);
+    //text("tweetography", width-width/3, 80);
+  }
   else
     text("inspection", width-width/3, 80);
 }
 
-void calendar() {
-  rectMode(CORNERS);
-  fill(110, 40);
-  rect(width-200, 610, width-50, 640);
-  rect(width-200, 660, width-50, 690); 
-} 
-
 void legend() {
+  
   fill(#FF6600);
-  textFont(italics);
-  textSize(15);
-  text("map interface", 20, 660);
-  fill(#FFFFFF);
-  textFont(plain);
-  textSize(15);
-  text("up, down, right, left arrows to pan", 20, 680);
-  text("-, + keys to zoom", 20, 700);
-  text("'h' to resize, 'r' to refresh", 20, 720);
-  text("'click' to select tweets", 20, 740);
+  textFont(italics, 15);
+  int spacer = 600;
+  fill(0);
+  textFont(plain, 15);
+  text("[ arrows ] to pan", 10, spacer+20);
+  text("[ +/- ] to zoom", 10, spacer+40);
+  text("[ r ] to refresh", 10, spacer+60);
+  text("[ 'CLICK' ] to select tweets", 10, spacer+80);
+  
+  textFont(italics, 15);
+  fill(#FF6600);
+  text("tweet >>>", 10, 740);
+  
+  fill(0);
+  textFont(plain, 15);
   text("return to map", 100, 20+12);
   text("inspect the data", 100, 60+12);
   text("tweets over time", 100, 100+12); 
@@ -301,11 +333,25 @@ void legend() {
 
 void Home() {
   analyze = false;
+  selectedCities = new City[0];
+  wordCram = null;
+  Location centerLocation = new Location(40, 10);
+  map.zoomAndPanTo(centerLocation, 2);
+  for (City c:cities)
+      c.col = newCol;
 }
 
 void Play() {
-  if (analyze == false)
+  if (pressed) {
+    time = false;
+    pressed = false;
+    aggregate = new City[0];
+    
+  }
+  else if (analyze == false) {
     time = true;
+    pressed = true;
+  }
 }
 
 void Mood() {
@@ -317,7 +363,7 @@ void Mood() {
       else if (mood==2) 
         c.col =  #0276FD;
       else
-        c.col = #33FF33;
+        c.col = #66CD00;
     }
   }
 }
@@ -337,6 +383,6 @@ void getWordCram() {
     .withPlacer(Placers.centerClump())
     .sizedByWeight(12, 60)
     .withColors(color(234, 21, 122), color (0, 112, 192), color (26, 179, 159));
-  wordCram.drawAll();
-  saveFrame("cram.png");
+  //wordCram.drawAll();
+  //saveFrame("cram.png");
 }

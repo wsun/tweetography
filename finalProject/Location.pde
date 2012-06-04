@@ -6,6 +6,7 @@ class City {
   color col;
   boolean mouseOver;
 
+
   City(float lat, float lng, String tweet, String datetime, int statuses, int followers, int friends, int mood) {
     this.lat = lat;
     this.lng = lng;
@@ -15,11 +16,10 @@ class City {
     this.followers = followers;
     this.friends = friends;
     this.mood = mood;
-    col = #FFFFFF;
+    col = #00688B;
     location = new Location(lat, lng);
     tick();
   }   
-      
   void tick() {
     float xy[] = map.getScreenPositionFromLocation(location);
     x = xy[0];
@@ -32,7 +32,7 @@ class City {
   void draw() {
     markerRadius = constrain(map.getZoom()/10, 1, 20) * 8;
     fill(col);
-    ellipse(x, y, markerRadius/3, markerRadius/3);
+    ellipse(x, y, markerRadius/2, markerRadius/2);
     fill(col, 40);
     noStroke();
     ellipse(x, y, markerRadius, markerRadius);
@@ -46,5 +46,5 @@ class City {
       return false;
     }
   }
-
 }
+
