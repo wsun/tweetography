@@ -55,5 +55,9 @@ module Tweetography
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # WILL's EDIT
+    # Prevents Rails environment from being loaded when 'assets:precompile' task is executed
+    config.assets.initialize_on_precompile = false
   end
 end
