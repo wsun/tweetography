@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  created: 2012-06-15 01:04:00
+  user: MyString
+  userid: 1
+  name: MyString
+  text: MyString
+  loc: MyString
+  timezone: MyString
+  statuses: 1
+  followers: 1
+  friends: 1
+  source: MyString
+  lat: 9.99
+  lon: 9.99
+  mood: 1
+
+two:
+  created: 2012-06-15 01:04:00
+  user: MyString
+  userid: 1
+  name: MyString
+  text: MyString
+  loc: MyString
+  timezone: MyString
+  statuses: 1
+  followers: 1
+  friends: 1
+  source: MyString
+  lat: 9.99
+  lon: 9.99
+  mood: 1

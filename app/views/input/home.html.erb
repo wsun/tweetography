@@ -9,8 +9,7 @@
 </div>
 
 <%= form_tag(visualize_path, class: "form-horizontal",
-                             autocomplete: "off" ) do %>
-    <legend></legend>    
+                             autocomplete: "off" ) do %>  
 
     <% unless alert.nil? %>
         <div class="alert alert-error fade in">
@@ -46,8 +45,8 @@
     </div> 
     <div class="form-actions">
         <button name="commit", type="submit", 
-                id="submit", disabled="disabled",
-                class="btn btn-primary", data-loading-text="Searching...">
+                id="submit",
+                class="btn btn-primary">
             <i class="icon-search icon-white"></i>
             Search
         </button>
@@ -63,7 +62,6 @@
             $('#submit').on('click', function () {
                  $(this).button('loading');
             });
-
         </script>
     </div>
 

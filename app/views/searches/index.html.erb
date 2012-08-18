@@ -1,38 +1,3 @@
-<p><%= @unique %></p>
-
-<p>Geocode: <%= @geo %></p>
-<p>Config: <%= @config %></p>
-<p>Query: <%= @query %></p>
-<p>Mood: <%= @mood %></p>
-<p>Process: <%= @process %></p>
-<p>Write: <%= @write %></p>
-
-<h1>Listing locations</h1>
-
-<table>
-  <tr>
-    <th>Address</th>
-    <th>Latitude</th>
-    <th>Longitude</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @locations.each do |location| %>
-  <tr>
-    <td><%= location.address %></td>
-    <td><%= location.latitude %></td>
-    <td><%= location.longitude %></td>
-    <td><%= link_to 'Show', location %></td>
-    <td><%= link_to 'Edit', edit_location_path(location) %></td>
-    <td><%= link_to 'Destroy', location, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
 <h1>Listing searches</h1>
 
 <table>
@@ -80,3 +45,7 @@
   </tr>
 <% end %>
 </table>
+
+<br />
+
+<%= link_to 'New Search', new_search_path %>

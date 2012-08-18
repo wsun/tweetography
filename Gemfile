@@ -1,10 +1,21 @@
 source 'https://rubygems.org'
 
+ruby '1.9.3'
 gem 'rails', '3.2.3'
-gem 'bootstrap-sass', '2.0.2'
+gem 'heroku'
+
+# A BETTER WEBSERVER
+# gem 'thin'
+
+gem 'bootstrap-sass', '2.0.4.0'
 gem 'geocoder'
 gem 'twitter'
 gem 'httparty'
+gem 'texticle', '2.0', :require => 'texticle/rails'
+
+# workers and queues
+gem 'resque', :require => 'resque/server', :require => 'resque/status_server'
+gem 'resque-status'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

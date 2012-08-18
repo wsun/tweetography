@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Created:</b>
+  <%= @search.created %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @search.user %>
+</p>
+
+<p>
+  <b>Userid:</b>
+  <%= @search.userid %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @search.name %>
+</p>
+
+<p>
+  <b>Text:</b>
+  <%= @search.text %>
+</p>
+
+<p>
+  <b>Loc:</b>
+  <%= @search.loc %>
+</p>
+
+<p>
+  <b>Timezone:</b>
+  <%= @search.timezone %>
+</p>
+
+<p>
+  <b>Statuses:</b>
+  <%= @search.statuses %>
+</p>
+
+<p>
+  <b>Followers:</b>
+  <%= @search.followers %>
+</p>
+
+<p>
+  <b>Friends:</b>
+  <%= @search.friends %>
+</p>
+
+<p>
+  <b>Source:</b>
+  <%= @search.source %>
+</p>
+
+<p>
+  <b>Lat:</b>
+  <%= @search.lat %>
+</p>
+
+<p>
+  <b>Lon:</b>
+  <%= @search.lon %>
+</p>
+
+<p>
+  <b>Mood:</b>
+  <%= @search.mood %>
+</p>
+
+
+<%= link_to 'Edit', edit_search_path(@search) %> |
+<%= link_to 'Back', searches_path %>

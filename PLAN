@@ -1,0 +1,19 @@
+* (1) fix twitter
+* (2) location model and search model
+* (3) location search (texticle*, sphinx, arel)
+* (4) fix geocoder: geokit v. geocoder* (Bing key) v. graticule
+
+* TEST speed - where is the bottleneck
+
+* write view to see output of database
+* trick heroku: redis-to-go and resque
+@ ajax polling with Kill
+install sqlibrary
+figure out how to contact db on heroku
+write processing code
+deploy to heroku
+
+schedule db clean (https://devcenter.heroku.com/articles/scheduler)
+authentication (devise, plaintext?)
+error calls
+refactor code

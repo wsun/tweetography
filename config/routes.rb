@@ -1,5 +1,9 @@
 Tweetography::Application.routes.draw do
   
+  resources :locations
+
+  resources :searches
+
   # home page
   root :to => 'input#home'
 
@@ -7,6 +11,9 @@ Tweetography::Application.routes.draw do
   match '/visualize' => 'input#visualize', :as => :visualize
   match '/sample' => 'input#sample', :as => :sample
   match '/about' => 'input#about', :as => :about
+
+  # resque-web
+  mount Resque::Server, :at => '/resque'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

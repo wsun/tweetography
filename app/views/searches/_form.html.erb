@@ -1,0 +1,73 @@
+<%= form_for(@search) do |f| %>
+  <% if @search.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@search.errors.count, "error") %> prohibited this search from being saved:</h2>
+
+      <ul>
+      <% @search.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :created %><br />
+    <%= f.datetime_select :created %>
+  </div>
+  <div class="field">
+    <%= f.label :user %><br />
+    <%= f.text_field :user %>
+  </div>
+  <div class="field">
+    <%= f.label :userid %><br />
+    <%= f.number_field :userid %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :text %><br />
+    <%= f.text_field :text %>
+  </div>
+  <div class="field">
+    <%= f.label :loc %><br />
+    <%= f.text_field :loc %>
+  </div>
+  <div class="field">
+    <%= f.label :timezone %><br />
+    <%= f.text_field :timezone %>
+  </div>
+  <div class="field">
+    <%= f.label :statuses %><br />
+    <%= f.number_field :statuses %>
+  </div>
+  <div class="field">
+    <%= f.label :followers %><br />
+    <%= f.number_field :followers %>
+  </div>
+  <div class="field">
+    <%= f.label :friends %><br />
+    <%= f.number_field :friends %>
+  </div>
+  <div class="field">
+    <%= f.label :source %><br />
+    <%= f.text_field :source %>
+  </div>
+  <div class="field">
+    <%= f.label :lat %><br />
+    <%= f.text_field :lat %>
+  </div>
+  <div class="field">
+    <%= f.label :lon %><br />
+    <%= f.text_field :lon %>
+  </div>
+  <div class="field">
+    <%= f.label :mood %><br />
+    <%= f.number_field :mood %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
