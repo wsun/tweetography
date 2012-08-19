@@ -15,4 +15,7 @@
 //= require bootstrap-tooltip
 //= require bootstrap-popover
 //= require bootstrap-button
+//= require bootstrap-alert
+//= require bootstrap-modal
+//= require polling
 //= require_tree .

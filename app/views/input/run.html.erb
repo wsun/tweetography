@@ -8,7 +8,7 @@
     <h1>Visualize some tweets.</h1>
 </div>
 
-<%= form_tag(run_path, class: "form-horizontal", autocomplete: "on") do %>
+<%= form_tag(run_path, class: "form-horizontal", autocomplete: "off") do %>
     <% unless alert.nil? %>
         <div class="alert alert-error fade in">
             <a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -20,14 +20,14 @@
     <div class="control-group">
         <%= label_tag 'keyword', nil, class: "control-label" %>
         <div class="controls">
-            <%= text_field_tag 'keyword', nil %>
+            <%= text_field_tag 'keyword', @k %>
             <p class="help-block" id="req">(required)</p>
         </div>    
     </div>
     <div class="control-group">
         <%= label_tag 'city', nil, class: "control-label" %>
         <div class="controls">
-            <%= text_field_tag 'city', nil %>
+            <%= text_field_tag 'city', @c %>
             <p class="help-block">Enter in city to focus search on</p>
         </div>    
     </div>
@@ -35,7 +35,7 @@
         <%= label_tag 'radius', nil, class: "control-label" %>
         <div class="controls">
             <div class="input-append">
-                <%= number_field_tag 'radius', nil, min: 0 %>
+                <%= number_field_tag 'radius', @r, min: 0 %>
                 <span class="add-on">mi</span>
             </div>
             <p class="help-block">Radius around city in miles
@@ -43,35 +43,45 @@
         </div>
     </div> 
     <div class="form-actions">
-        <button name="commit" type="submit" id="submit" 
+        <button name="commit" type="submit" id="submit" disabled="disabled"
                 class="btn btn-primary" data-loading-text="Searching...">
             <i class="icon-search icon-white"></i>
             Search
         </button>
         <%= link_to "Sample", sample_path, 
                 class: "btn btn-success", 
-                id: "sample", 
-                "data-title" => "A Sample Visualization",
-                "data-content" => "Explore a set of Harvard-related tweets!",
-                rel: "popover" %>
-        <script>
-            /*
-            // don't let the search button get disabled
-            $(window).unload(function() { // TODO time this with modal
-                $('.btn-primary').button('reset');
-            });
-            */
-
-            // popover and submit button JS
-            $("a[rel=popover]").popover();
-            $("#submit").button();
-            $("#submit").on('click', function () {
-                 $(this).button('loading');
-            });
-        </script>
+                "disabled" => "disabled",
+                id: "sample" %>
     </div>
 
 <div class="alert alert-error">
     <strong>Sorry!</strong> Search is temporarily disabled while we make some back-end improvements.
 </div>
 <% end %>
+
+<div class="modal hide" id="resque-modal" style="display: none" 
+data-backdrop="static" data-keyboard="false" data-jid="<%= @jid %>">
+  <div class="modal-header">
+    <h3>Constructing visualization</h3>
+  </div>
+  <div class="modal-body">
+    <p>Using keyword <strong><%= @k %></strong></p>
+    <p>Job id <%= @jid %></p>
+    <p id="status"></p>
+    <div class="progress">
+      <div class="bar" style="width: 0%;"></div>
+    </div>
+    <p id="message"></p>
+  </div>
+  <div class="modal-footer">
+    <%= link_to 'Cancel', kill_path(@jid), class: "btn btn-danger", 
+        confirm: 'Are you sure?', method: :delete %>
+    <%= link_to 'Visualize', visualize_path(@jid), 
+        class: 'btn btn-primary hide', id: 'view' %>
+  </div>
+</div>
+
+<script>
+  // show the modal
+  $('#resque-modal').modal('show');
+</script>

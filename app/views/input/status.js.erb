@@ -1,0 +1,9 @@
+$('.bar').css("width", <%= @status.pct_complete %> + "%");
+$('.bar').text(<%= @status.pct_complete %> + "%");
+$('#status').text("<%= @status.status %>");
+$('#message').text("<%= @status.message %>");
+
+if ("<%= @status.status %>" == "completed")
+{      
+  $('#view').removeClass('hide');
+}

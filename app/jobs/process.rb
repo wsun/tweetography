@@ -11,8 +11,8 @@ class ProcessJob
       config.consumer_secret = 'QzmwtlyCfffIiEio9TK6WJfK2RuxL0vn3UBvugs9Eo'
       config.oauth_token = '318868789-Eho05NqG1ZCEajYk7d9gU61xqk9AVbZAQqZKlwqI'
       config.oauth_token_secret = 'Ofa4sOJil0e26kcPxu6dAu7WcU1I7GrdLLiqpCpa0g'
-      config.search_endpoint = 'http://twitter-search-api-tweetography.apigee.com'
-      config.endpoint = 'http://twitter-api-tweetography.apigee.com'
+      #config.search_endpoint = 'http://twitter-search-api-tweetography.apigee.com'
+      #config.endpoint = 'http://twitter-api-tweetography.apigee.com'
     end
 
     # make the query

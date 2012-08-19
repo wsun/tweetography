@@ -7,8 +7,11 @@
 
 * write view to see output of database
 * trick heroku: redis-to-go and resque
-@ ajax polling with Kill
-install sqlibrary
+* ajax polling with Kill
+  ! prettify
+  ! clearTimeout
+  ! hide jid and button
+@ install sqlibrary
 figure out how to contact db on heroku
 write processing code
 deploy to heroku

@@ -1,14 +1,16 @@
 Tweetography::Application.routes.draw do
   
   resources :locations
-
   resources :searches
 
   # home page
   root :to => 'input#home'
 
   # routes
-  match '/visualize' => 'input#visualize', :as => :visualize
+  match '/run' => 'input#run', :as => :run
+  match '/status/' => 'input#status', :as => :status
+  match '/kill/:jid' => 'input#kill', :as => :kill, :via => :delete
+  match '/visualize/:jid' => 'input#visualize', :as => :visualize
   match '/sample' => 'input#sample', :as => :sample
   match '/about' => 'input#about', :as => :about
 
