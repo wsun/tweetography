@@ -15,6 +15,8 @@ import de.fhpotsdam.unfolding.events.*;
 import de.fhpotsdam.utils.*;
 import de.fhpotsdam.unfolding.providers.*;
 
+import de.bezier.data.sql.*;  
+
 //import processing.opengl.*; 
 import codeanticode.glgraphics.*;
 
@@ -42,6 +44,8 @@ int[] button = new int[4];
 int counter = 1;
 boolean pressed = false;
 color newCol = #00688B;
+
+PostgreSQL pgsql;
 
 // selection tool variables
 int sizeSelection = 50;
@@ -84,9 +88,31 @@ void setup() {
   button[2] = plot_x2 + 260;
   button[3] = plot_y2;
   
+  // SQLibrary and pgsql
+  City[] raw      = new City[0];
+  String user     = "apollo";
+  String pass     = "";
+  String database = "tweetography_development";
+  pgsql = new PostgreSQL( this, "localhost", database, user, pass );
+
+  if ( pgsql.connect() )
+  {    
+    // query for relevant data
+    String jid = "3fac98f0cd71012f33023c07542f2f9a";
+    String prep = "SELECT * FROM searches WHERE query = '%s' ORDER BY tweeted DESC";
+    String query = String.format(prep, jid);
+    pgsql.query( query );
+    
+    // anything found?
+    while( pgsql.next() )
+    {
+        // nice, then let's record them
+        raw = (City[]) append(raw, new City(pgsql.getFloat("lat"), pgsql.getFloat("lon"), pgsql.getString("name"), pgsql.getString("tweeted"), pgsql.getInt("statuses"), pgsql.getInt("followers"), pgsql.getInt("friends"), pgsql.getInt("mood")));
+    }
+  }
   
   // filling the screen a bit.
-  for (City c:loadCitiesFromCsv("cities/us.csv")) {
+  for (City c:raw) {
     smooth();
     cities.add(c);
   }

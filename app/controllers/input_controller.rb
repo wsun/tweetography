@@ -85,6 +85,14 @@ class InputController < ApplicationController
     end
   end
 
+  def info
+    @searches = Search.where("query = ?", params[:jid]).order("tweeted DESC")
+
+    respond_to do |format|
+      format.html # info.html.erb
+    end
+  end
+
   def visualize
     # DEBUG
     @jid = params[:jid]

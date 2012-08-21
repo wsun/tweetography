@@ -5,5 +5,4 @@ Resque.redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.
 
 Resque::Plugins::Status::Hash.expire_in = 600 # 10 min in seconds
 
-require 'test' # TestJob
 require 'process' # ProcessJob

@@ -132,7 +132,7 @@ class ProcessJob
       end
 
       # construct tweet db entry
-      t = Search.create :created => result.created_at,
+      t = Search.create :tweeted => result.created_at,
                         :user => result.from_user,
                         :userid => result.from_user_id,
                         :name => result.from_user_name,
