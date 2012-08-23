@@ -7,6 +7,9 @@ gem 'heroku'
 # A BETTER WEBSERVER
 gem 'thin'
 
+# MANAGING WORKERS
+gem 'hirefireapp'
+
 gem 'bootstrap-sass', '2.0.4.0'
 gem 'geocoder'
 gem 'twitter'
