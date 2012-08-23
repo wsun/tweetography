@@ -2,45 +2,40 @@ class ProcessJob
 	include Resque::Plugins::Status
 
 	# pass in options['keyword', 'loc', 'geo']
-  # via ProcessJob.create(keyword: 'harvard', loc: 'boston', geo: '100')
+  # via ProcessJob.create(keyword: 'harvard', loc: 'true', 
+  #                       geo: '40.5,32.76,100mi')
 	def perform
-  	
-    # OAuth config
-    Twitter.configure do |config|
-      config.consumer_key = 'W3mRvrBAYvTV1840W7w6w'
-      config.consumer_secret = 'QzmwtlyCfffIiEio9TK6WJfK2RuxL0vn3UBvugs9Eo'
-      config.oauth_token = '318868789-Eho05NqG1ZCEajYk7d9gU61xqk9AVbZAQqZKlwqI'
-      config.oauth_token_secret = 'Ofa4sOJil0e26kcPxu6dAu7WcU1I7GrdLLiqpCpa0g'
-      #config.search_endpoint = 'http://twitter-search-api-tweetography.apigee.com'
-      #config.endpoint = 'http://twitter-api-tweetography.apigee.com'
-    end
+
+    at(0, 100, 'making Twitter query.')
 
     # make the query
     results = []
     1.upto(15) do |i|
       q = []
-      if options['loc']
+      if options['loc'] == "true"
         q.concat(Twitter.search(options['keyword'], geocode: options['geo'], 
                                 lang: 'en', rpp: 100, page: i))
       else
         q.concat(Twitter.search(options['keyword'], lang: 'en', rpp: 100, 
                                 page: i))
       end
-      if q.empty?
+      if q.count < 100
+        results.concat(q)
         break
+      else
+        results.concat(q)
       end
-      results.concat(q)
     end
 
     # if no results, return message
     if results.empty?
-      failed()
+      failed('no results were found.')
       return
     end
 
     # update
     total = results.count
-    at(total/10, total + total/10 + total/30, "Finished Twitter query")
+    at(total/10, total + total/10 + total/30, 'analyzing mood of tweets.')
 
     # prepare user info
     users = Hash.new
@@ -64,7 +59,7 @@ class ProcessJob
     end
 
     # update
-    at(total/10 + total/30, total + total/10 + total/30, "Finished mood query")
+    at(total/10 + total/30, total + total/10 + total/30, 'collecting Twitter user info.')
 
     # make user requests in batches of 100 and fill hash
     user_ids = users.keys
@@ -151,7 +146,7 @@ class ProcessJob
       # update
       curr = i + 1
       at(total/10 + total/30 + curr, total + total/10 + total/30, 
-          "Processed #{curr} of #{total} tweets")
+        "processed #{curr} of #{total} tweets.")
     end
 
     # finish

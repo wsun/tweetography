@@ -1,84 +1,92 @@
-<p><%= @jid %></p>
+<div class="page-header">
+  <h1> Tweets about '<%= @k %>'</h1>
+</div>
 
-<!--
-<p>Geocode: <%= @geo %></p>
-<p>Config: <%= @config %></p>
-<p>Query: <%= @query %></p>
-<p>Mood: <%= @mood %></p>
-<p>Process: <%= @process %></p>
-<p>Write: <%= @write %></p>
--->
+<div class="row" id="visualization">
+  <div id="vis_container">
 
-<h1>Listing locations</h1>
+<!-- This version plays nicer with older browsers, 
+     but requires JavaScript to be enabled. 
+     http://java.sun.com/javase/6/docs/technotes/guides/jweb/deployment_advice.html
+     http://download.oracle.com/javase/tutorial/deployment/deploymentInDepth/ -->
+<script type="text/javascript"
+  src="http://www.java.com/js/deployJava.js"></script>
+<script type="text/javascript">
+  /* <![CDATA[ */
 
-<table>
-  <tr>
-    <th>Address</th>
-    <th>Latitude</th>
-    <th>Longitude</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+  var attributes = { 
+          code: 'finalProject.class',
+          archive: '/visualize/finalProject.jar,/visualize/log4j-1.2.15.jar,/visualize/Unfolding.jar,/visualize/GLGraphics.jar,/visualize/cue.language.jar,/visualize/jsoup-1.3.3.jar,/visualize/WordCram.jar,/visualize/controlP5.jar,/visualize/core.jar,/visualize/controlP5.jar,/visualize/core.jar,/visualize/GLGraphics.jar,/visualize/jsoup-1.3.3.jar,/visualize/log4j-1.2.15.jar,/visualize/opengl.jar,/visualize/sqlitejdbc-v056.jar,/visualize/Unfolding.jar,/visualize/WordCram.jar',
+          width: 970, 
+          height: 768,
+        };
+        var parameters = { 
+          image: '/visualize/loading.gif',
+          centerimage: 'true',
+          jid: '<%= @jid %>',
+        };
+        var version = '1.5';
+        deployJava.runApplet(attributes, parameters, version);
 
-<% @locations.each do |location| %>
-  <tr>
-    <td><%= location.address %></td>
-    <td><%= location.latitude %></td>
-    <td><%= location.longitude %></td>
-    <td><%= link_to 'Show', location %></td>
-    <td><%= link_to 'Edit', edit_location_path(location) %></td>
-    <td><%= link_to 'Destroy', location, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
+        /* ]]> */
+      </script>
+      
+<noscript> <div>
+  <!--[if !IE]> -->
+  <object classid="java:finalProject.class" 
+              type="application/x-java-applet"
+              archive="/visualize/finalProject.jar,/visualize/log4j-1.2.15.jar,/visualize/Unfolding.jar,/visualize/GLGraphics.jar,/visualize/cue.language.jar,/visualize/jsoup-1.3.3.jar,/visualize/WordCram.jar,/visualize/controlP5.jar,/visualize/core.jar,/visualize/controlP5.jar,/visualize/core.jar,/visualize/GLGraphics.jar,/visualize/jsoup-1.3.3.jar,/visualize/log4j-1.2.15.jar,/visualize/opengl.jar,/visualize/sqlitejdbc-v056.jar,/visualize/Unfolding.jar,/visualize/WordCram.jar"
+              width="970" height="768"
+              standby="Loading Processing software..." >
+          
+    <param name="archive" value="/visualize/finalProject.jar,/visualize/log4j-1.2.15.jar,/visualize/Unfolding.jar,/visualize/GLGraphics.jar,/visualize/cue.language.jar,/visualize/jsoup-1.3.3.jar,/visualize/WordCram.jar,/visualize/controlP5.jar,/visualize/core.jar,/visualize/controlP5.jar,/visualize/core.jar,/visualize/GLGraphics.jar,/visualize/jsoup-1.3.3.jar,/visualize/log4j-1.2.15.jar,/visualize/opengl.jar,/visualize/sqlitejdbc-v056.jar,/visualize/Unfolding.jar,/visualize/WordCram.jar" />
+    
+    <param name="mayscript" value="true" />
+    <param name="scriptable" value="true" />
+    
+    <param name="image" value="/visualize/loading.gif" />
+    <param name="boxmessage" value="Loading Processing software..." />
+    <param name="boxbgcolor" value="#FFFFFF" />
+    <param name="jid" value="<%= @jid %>" />
+  <!--<![endif]-->
 
-<br />
+    <!-- For more instructions on deployment, 
+   or to update the CAB file listed here, see:
+   http://java.sun.com/javase/6/webnotes/family-clsid.html
+   http://java.sun.com/javase/6/webnotes/install/jre/autodownload.html -->
+    <object classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
+      codebase="http://java.sun.com/update/1.6.0/jinstall-6u20-windows-i586.cab"
+      width="970" height="768"
+      standby="Loading Processing software..."  >
+      
+      <param name="code" value="finalProject" />
+      <param name="archive" value="/visualize/finalProject.jar,/visualize/log4j-1.2.15.jar,/visualize/Unfolding.jar,/visualize/GLGraphics.jar,/visualize/cue.language.jar,/visualize/jsoup-1.3.3.jar,/visualize/WordCram.jar,/visualize/controlP5.jar,/visualize/core.jar,/visualize/controlP5.jar,/visualize/core.jar,/visualize/GLGraphics.jar,/visualize/jsoup-1.3.3.jar,/visualize/log4j-1.2.15.jar,/visualize/opengl.jar,/visualize/sqlitejdbc-v056.jar,/visualize/Unfolding.jar,/visualize/WordCram.jar" />
+      
+      <param name="mayscript" value="true" />
+      <param name="scriptable" value="true" />
+      
+      <param name="image" value="/visualize/loading.gif" />
+      <param name="boxmessage" value="Loading Processing software..." />
+      <param name="boxbgcolor" value="#FFFFFF" />
+      <param name="jid" value="<%= @jid %>" />
+      <p>
+  <strong>
+    This browser does not have a Java Plug-in.
+    <br />
+    <a href="http://www.java.com/getjava" title="Download Java Plug-in">
+      Get the latest Java Plug-in here.
+    </a>
+  </strong>
+      </p>
+      
+    </object>
+    
+  <!--[if !IE]> -->
+  </object>
+  <!--<![endif]-->
 
-<h1>Listing searches</h1>
+</div> </noscript>
 
-<table>
-  <tr>
-    <th>Tweeted</th>
-    <th>User</th>
-    <th>Userid</th>
-    <th>Name</th>
-    <th>Text</th>
-    <th>Loc</th>
-    <th>Timezone</th>
-    <th>Statuses</th>
-    <th>Followers</th>
-    <th>Friends</th>
-    <th>Source</th>
-    <th>Lat</th>
-    <th>Lon</th>
-    <th>Mood</th>
-    <th>Query</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @searches.each do |search| %>
-  <tr>
-    <td><%= search.tweeted %></td>
-    <td><%= search.user %></td>
-    <td><%= search.userid %></td>
-    <td><%= search.name %></td>
-    <td><%= search.text %></td>
-    <td><%= search.loc %></td>
-    <td><%= search.timezone %></td>
-    <td><%= search.statuses %></td>
-    <td><%= search.followers %></td>
-    <td><%= search.friends %></td>
-    <td><%= search.source %></td>
-    <td><%= search.lat %></td>
-    <td><%= search.lon %></td>
-    <td><%= search.mood %></td>
-    <td><%= search.query %></td>
-    <td><%= link_to 'Show', search %></td>
-    <td><%= link_to 'Edit', edit_search_path(search) %></td>
-    <td><%= link_to 'Destroy', search, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
+  </div>
+</div>
+</br>

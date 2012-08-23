@@ -8,7 +8,9 @@ $(function () {
 function updateStatus() {
   var jid = $('#resque-modal').attr('data-jid');
   $.getScript('/status.js?jid=' + jid);
-  setTimeout(updateStatus, 2000);
-}
 
-// TODO: clearTimeout conditionally
+  // terminate polling once job stops
+  if ($('#status').hasClass('alert-info')) {
+    setTimeout(updateStatus, 2000);
+  }
+}

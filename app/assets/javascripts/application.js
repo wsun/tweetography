@@ -12,10 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap-tooltip
-//= require bootstrap-popover
-//= require bootstrap-button
-//= require bootstrap-alert
-//= require bootstrap-modal
+//= require bootstrap
 //= require polling
 //= require_tree .

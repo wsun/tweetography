@@ -15,8 +15,6 @@ import de.fhpotsdam.unfolding.events.*;
 import de.fhpotsdam.utils.*;
 import de.fhpotsdam.unfolding.providers.*;
 
-import de.bezier.data.sql.*;  
-
 //import processing.opengl.*; 
 import codeanticode.glgraphics.*;
 
@@ -44,8 +42,6 @@ int[] button = new int[4];
 int counter = 1;
 boolean pressed = false;
 color newCol = #00688B;
-
-PostgreSQL pgsql;
 
 // selection tool variables
 int sizeSelection = 50;
@@ -88,31 +84,9 @@ void setup() {
   button[2] = plot_x2 + 260;
   button[3] = plot_y2;
   
-  // SQLibrary and pgsql
-  City[] raw      = new City[0];
-  String user     = "apollo";
-  String pass     = "";
-  String database = "tweetography_development";
-  pgsql = new PostgreSQL( this, "localhost", database, user, pass );
-
-  if ( pgsql.connect() )
-  {    
-    // query for relevant data
-    String jid = "3fac98f0cd71012f33023c07542f2f9a";
-    String prep = "SELECT * FROM searches WHERE query = '%s' ORDER BY tweeted DESC";
-    String query = String.format(prep, jid);
-    pgsql.query( query );
-    
-    // anything found?
-    while( pgsql.next() )
-    {
-        // nice, then let's record them
-        raw = (City[]) append(raw, new City(pgsql.getFloat("lat"), pgsql.getFloat("lon"), pgsql.getString("name"), pgsql.getString("tweeted"), pgsql.getInt("statuses"), pgsql.getInt("followers"), pgsql.getInt("friends"), pgsql.getInt("mood")));
-    }
-  }
-  
   // filling the screen a bit.
-  for (City c:raw) {
+  String jid = param("jid");
+  for (City c:loadCitiesFromServer(jid)) {
     smooth();
     cities.add(c);
   }
@@ -197,16 +171,14 @@ void draw() {
     fill(#FF6600);
     textFont(plain);
     String s = cities.get(cities.size()-counter).datetime;
-    int first = s.indexOf('/');
-    int next = s.lastIndexOf('/');
-    String the_month = getMonthForInt(int(s.substring(0, first)));
-    String the_day = s.substring(first+1, next);
-    String the_time = s.substring(next+4);     
+    String the_month = getMonthForInt(int(s.substring(5, 7)));
+    String the_day = s.substring(8, 10);
+    String the_time = s.substring(11, 19);     
     textAlign(RIGHT);
     textSize(20);
     text(the_month + " " + the_day, width-30, 710);
     fill(0);
-    text(the_time + " (24 hr)", width-30, 740);
+    text(the_time + " UTC", width-30, 740);
     
     counter++;
     if (counter > cities.size()) {
@@ -242,7 +214,7 @@ String getMonthForInt(int m) {
     String month = "invalid";
     DateFormatSymbols dfs = new DateFormatSymbols();
     String[] months = dfs.getMonths();
-    if (m >= 0 && m <= 11 ) {
+    if (m >= 1 && m <= 12 ) {
         month = months[m-1];
     }
     return month;
@@ -299,7 +271,7 @@ void hover() {
     float x = xy[0];
     float y = xy[1];
     if (near(x, y, sizeSelection)) {
-      textFont(plain, 15);
+      textFont(plain, 12);
       fill(0);
       text(c.tweet, 75, 740);
       textFont(plain, 12);

@@ -1,9 +1,23 @@
 $('.bar').css("width", <%= @status.pct_complete %> + "%");
 $('.bar').text(<%= @status.pct_complete %> + "%");
-$('#status').text("<%= @status.status %>");
-$('#message').text("<%= @status.message %>");
+$('#status').html("<strong><%= @status.status %></strong>. <%= @status.message %>");
 
-if ("<%= @status.status %>" == "completed")
-{      
-  $('#view').removeClass('hide');
+var current = "<%= @status.status %>";
+switch(current)
+{
+  case "queued":
+    break;
+  case "failed":
+  {
+    $('#status').addClass('alert-error');
+    $('#status').removeClass('alert-info');
+    break;
+  }
+  case "completed":
+  {
+    $('#status').addClass('alert-success');
+    $('#status').removeClass('alert-info');
+    $('#view').removeClass('hide');
+    break;
+  }
 }

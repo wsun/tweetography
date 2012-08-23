@@ -1,0 +1,84 @@
+<p><%= @jid %></p>
+
+
+<p>Geocode: <%= @geo %></p>
+<p>Config: <%= @config %></p>
+<p>Query: <%= @query %></p>
+<p>Mood: <%= @mood %></p>
+<p>Process: <%= @process %></p>
+<p>Write: <%= @write %></p>
+
+
+<h1>Listing locations</h1>
+
+<table>
+  <tr>
+    <th>Address</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @locations.each do |location| %>
+  <tr>
+    <td><%= location.address %></td>
+    <td><%= location.latitude %></td>
+    <td><%= location.longitude %></td>
+    <td><%= link_to 'Show', location %></td>
+    <td><%= link_to 'Edit', edit_location_path(location) %></td>
+    <td><%= link_to 'Destroy', location, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<h1>Listing searches</h1>
+
+<table>
+  <tr>
+    <th>Tweeted</th>
+    <th>User</th>
+    <th>Userid</th>
+    <th>Name</th>
+    <th>Text</th>
+    <th>Loc</th>
+    <th>Timezone</th>
+    <th>Statuses</th>
+    <th>Followers</th>
+    <th>Friends</th>
+    <th>Source</th>
+    <th>Lat</th>
+    <th>Lon</th>
+    <th>Mood</th>
+    <th>Query</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @searches.each do |search| %>
+  <tr>
+    <td><%= search.tweeted %></td>
+    <td><%= search.user %></td>
+    <td><%= search.userid %></td>
+    <td><%= search.name %></td>
+    <td><%= search.text %></td>
+    <td><%= search.loc %></td>
+    <td><%= search.timezone %></td>
+    <td><%= search.statuses %></td>
+    <td><%= search.followers %></td>
+    <td><%= search.friends %></td>
+    <td><%= search.source %></td>
+    <td><%= search.lat %></td>
+    <td><%= search.lon %></td>
+    <td><%= search.mood %></td>
+    <td><%= search.query %></td>
+    <td><%= link_to 'Show', search %></td>
+    <td><%= link_to 'Edit', edit_search_path(search) %></td>
+    <td><%= link_to 'Destroy', search, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>

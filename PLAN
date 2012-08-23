@@ -8,13 +8,14 @@
 * write view to see output of database
 * trick heroku: redis-to-go and resque
 * ajax polling with Kill
-  ! prettify
+  ! prettify (messages, better modal)
   ! clearTimeout
   ! hide jid and button
-@ install sqlibrary
-figure out how to contact db on heroku
-write processing code
-deploy to heroku
+* install sqlibrary
+* figure out how to contact db on heroku
+* write processing code
+  * correct parameters for visualize (keyword + check that js param works)
+@ deploy to heroku
 
 schedule db clean (https://devcenter.heroku.com/articles/scheduler)
 authentication (devise, plaintext?)

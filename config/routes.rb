@@ -11,9 +11,10 @@ Tweetography::Application.routes.draw do
   match '/status/' => 'input#status', :as => :status
   match '/kill/:jid' => 'input#kill', :as => :kill, :via => :delete
   match '/info/:jid' => 'input#info', :as => :info
-  match '/visualize/:jid' => 'input#visualize', :as => :visualize
+  match '/visualize/:jid/:keyword' => 'input#visualize', :as => :visualize
   match '/sample' => 'input#sample', :as => :sample
   match '/about' => 'input#about', :as => :about
+  # match '/export/:jid' => 'input#export', :as => :export
 
   # resque-web
   mount Resque::Server, :at => '/resque'
