@@ -8,8 +8,8 @@
 * write view to see output of database
 * trick heroku: redis-to-go and resque
 * ajax polling with Kill
-  ! prettify (messages, better modal)
-  ! clearTimeout
+  * prettify (messages, better modal)
+  * clearTimeout
   ! hide jid and button
 * install sqlibrary
 * figure out how to contact db on heroku
