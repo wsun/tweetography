@@ -5,7 +5,7 @@ gem 'rails', '3.2.3'
 gem 'heroku'
 
 # A BETTER WEBSERVER
-# gem 'thin'
+gem 'thin'
 
 gem 'bootstrap-sass', '2.0.4.0'
 gem 'geocoder'

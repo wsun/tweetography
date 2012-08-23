@@ -25,7 +25,7 @@ class ProcessJob
         attempts = 0
         q = begin
           Twitter.search(options['keyword'], lang: 'en', rpp: 100, 
-                                page: i))
+                                page: i)
         rescue Twitter::Error::ClientError
           attempts += 1
           retry unless attempts > 3
