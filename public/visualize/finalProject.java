@@ -563,7 +563,7 @@ public City[] loadCitiesFromCsv(String file) {
 public City[] loadCitiesFromServer(String jid) {
   City[] result = new City[0];
   println("loading " + jid + "...");
-  String[] lines = loadStrings("http://localhost:3000/info/" + jid);
+  String[] lines = loadStrings("http://tweetography.herokuapp.com/info/" + jid);
   for (String line:lines) {
     String[] fields = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
     if(fields.length == 8) {
