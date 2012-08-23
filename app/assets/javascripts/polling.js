@@ -1,7 +1,7 @@
 $(function () {
   // check that page has the modal
   if ($('#resque-modal').length > 0) {
-    setTimeout(updateStatus, 1000);
+    updateStatus();
   }
 });
 

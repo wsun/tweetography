@@ -11,20 +11,28 @@ class ProcessJob
     # make the query
     results = []
     1.upto(15) do |i|
-      q = []
       if options['loc'] == "true"
-        q.concat(Twitter.search(options['keyword'], geocode: options['geo'], 
-                                lang: 'en', rpp: 100, page: i))
+        attempts = 0
+        q = begin
+          Twitter.search(options['keyword'], geocode: options['geo'], 
+                                lang: 'en', rpp: 100, page: i)
+        rescue Twitter::Error::ClientError
+          attempts += 1
+          retry unless attempts > 3
+          []
+        end
       else
-        q.concat(Twitter.search(options['keyword'], lang: 'en', rpp: 100, 
+        attempts = 0
+        q = begin
+          Twitter.search(options['keyword'], lang: 'en', rpp: 100, 
                                 page: i))
+        rescue Twitter::Error::ClientError
+          attempts += 1
+          retry unless attempts > 3
+          []
+        end
       end
-      if q.count < 100
-        results.concat(q)
-        break
-      else
-        results.concat(q)
-      end
+      results.concat(q)
     end
 
     # if no results, return message
