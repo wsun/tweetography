@@ -1,5 +1,5 @@
 == Overview
-This app is a combination of Ruby on Rails and Processing. Though it has already been pushed online (http://www.tweetography.com) via Heroku deployment, server limitations essentially prevent any real-time querying from occurring, since it takes longer than the 30 s timeout threshold. As a result, the online version can merely display the sample visualization we have provided. With that said, it is possible to run the entire website on a local machine, by using the 'rails server' command; this allows for search capabilities to be fully demonstrated.
+This app is a combination of Ruby on Rails and Processing. It currently lives at: http://www.tweetography.com
 
 == Local Setup
 Ruby 1.9.3p125 / Rails 3.2.3
@@ -12,7 +12,7 @@ Ruby 1.9.3p125 / Rails 3.2.3
 7. run 'rails s' to fire up an instance of the server
 8. navigate to http://localhost:3000
 
-Processing
+Processing (visualization only)
 1. extract the 4 library files in the 'libraries.zip' folder to
 /Username/Documents/Processing/libraries or c:/My Documents/Processing (on PC, you might need to make a new folder)
 2. load finalProject.pde 
@@ -23,7 +23,7 @@ Overall, the app hinges on two primary capabilities:
 1. data collection through Ruby and APIs
 2. visualization through Processing
 
-The Ruby/Rails app is fairly simple. A basic search form allows users to search for tweets by keyword and near a location. The main code for this lies in 'input#visualize' (in the input_controller). A series of steps takes place:
+The Ruby/Rails app is fairly simple. A basic search form allows users to search for tweets by keyword and near a location. The work is pushed off to a Resque worker. A series of steps takes place:
 1. Location input is converted to lat/lon for Twitter API call via Ruby Geocoder
 2. Twitter search API returns a list of tweet objects
 3. Tweets can be geocoded and come with lat/lon, but the large majority of them do not; we then try to use user-reported location to query via Ruby Geocoder to ascertain location coordinates. If no location can be found, the tweet is thrown out.
