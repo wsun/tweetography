@@ -1,7 +1,7 @@
-== Overview
+## Overview
 This app is a combination of Ruby on Rails and Processing. It currently lives at: http://www.tweetography.com
 
-== Local Setup
+## Local Setup
 Ruby 1.9.3p125 / Rails 3.2.3
 1. install necessary packages (gcc, git, etc)
 2. install ruby version manager (rvm)
@@ -14,12 +14,12 @@ Ruby 1.9.3p125 / Rails 3.2.3
 9. navigate to http://localhost:3000
 
 Processing (visualization only)
-1. extract the 4 library files in the 'libraries.zip' folder to
+1. extract the 4 library files in the `libraries.zip` folder to
 /Username/Documents/Processing/libraries or c:/My Documents/Processing (on PC, you might need to make a new folder)
 2. load finalProject.pde 
 3. run
 
-== Structure
+## Structure
 Overall, the app hinges on two primary capabilities:
 1. data collection through Ruby and APIs
 2. visualization through Processing
