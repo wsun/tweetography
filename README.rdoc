@@ -5,12 +5,13 @@ This app is a combination of Ruby on Rails and Processing. It currently lives at
 Ruby 1.9.3p125 / Rails 3.2.3
 1. install necessary packages (gcc, git, etc)
 2. install ruby version manager (rvm)
-3. install the latest version of ruby with rvm (*this is critical)
-4. install ruby gems
-5. install rails
-6. within the project directory, run 'bundle install' to install any necessary gems
-7. run 'rails s' to fire up an instance of the server
-8. navigate to http://localhost:3000
+3. install the latest version of ruby with rvm
+4. install rails
+5. within the project directory, run 'bundle install' to install any necessary gems
+6. set up environment variables: `RESQUE_USER`, `RESQUE_PASS`, `TWITTER_CONSUMER_KEY`, `TWITTER_CONSUMER_SECRET`, `TWITTER_OAUTH_TOKEN`, `TWITTER_OAUTH_TOKEN_SECRET`, `REDISTOGO_URL`
+7. install redis
+8. run 'rails s' to fire up an instance of the server
+9. navigate to http://localhost:3000
 
 Processing (visualization only)
 1. extract the 4 library files in the 'libraries.zip' folder to
