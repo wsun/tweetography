@@ -10,12 +10,18 @@ class ProcessJob
 
     # make the query
     results = []
+    max = nil
     1.upto(15) do |i|
       if options['loc'] == "true"
         attempts = 0
         q = begin
-          Twitter.search(options['keyword'], geocode: options['geo'], 
-                                lang: 'en', rpp: 100, page: i)
+          if max.nil?
+            Twitter.search(options['keyword'], geocode: options['geo'], 
+                            lang: 'en', count: 100).statuses
+          else
+            Twitter.search(options['keyword'], geocode: options['geo'], 
+                            lang: 'en', count: 100, max_id: max).statuses
+          end
         rescue Twitter::Error::ClientError
           attempts += 1
           retry unless attempts > 3
@@ -24,8 +30,12 @@ class ProcessJob
       else
         attempts = 0
         q = begin
-          Twitter.search(options['keyword'], lang: 'en', rpp: 100, 
-                                page: i)
+          if max.nil?
+            Twitter.search(options['keyword'], lang: 'en', count: 100).statuses
+          else
+            Twitter.search(options['keyword'], lang: 'en', count: 100, 
+                            max_id: max).statuses
+          end
         rescue Twitter::Error::ClientError
           attempts += 1
           retry unless attempts > 3
@@ -33,6 +43,7 @@ class ProcessJob
         end
       end
       results.concat(q)
+      max = q[-1].id - 1
     end
 
     # if no results, return message
@@ -45,17 +56,11 @@ class ProcessJob
     total = results.count
     at(total/10, total + total/10 + total/30, 'analyzing mood of tweets.')
 
-    # prepare user info
-    users = Hash.new
-
     # query for mood of tweets
     moods = []
     x = []
     results.each do |r|
       x.push({text: r.text})
-
-      # save user ids as we loop through in this prep phase
-      users.store(r.from_user_id, 0)
     end
     request = {data: x}
     url = 'http://twittersentiment.appspot.com/api/bulkClassifyJson'
@@ -69,31 +74,12 @@ class ProcessJob
     # update
     at(total/10 + total/30, total + total/10 + total/30, 'collecting Twitter user info.')
 
-    # make user requests in batches of 100 and fill hash
-    user_ids = users.keys
-    user_count = user_ids.count
-    start = 0
-    while user_count > 0
-      if user_count > 100
-        response = Twitter.users(*user_ids[start, 100])
-        user_count -= 100
-        start += 100
-      else
-        response = Twitter.users(*user_ids[start, user_count])
-        user_count = 0
-      end
-      response.each do |r|
-        users[r.id] = r
-      end
-    end
-
     # prepare info, use jobid to mark query
     unique = uuid
     
     # loop through results
     0.upto(total - 1) do |i|
       result = results[i]
-      user = users[result.from_user_id]
 
       lat = nil
       lon = nil
@@ -136,15 +122,15 @@ class ProcessJob
 
       # construct tweet db entry
       t = Search.create :tweeted => result.created_at,
-                        :user => result.from_user,
-                        :userid => result.from_user_id,
-                        :name => result.from_user_name,
+                        :user => result.user.screen_name,
+                        :userid => result.user.id,
+                        :name => result.user.name,
                         :text => result.text,
-                        :loc => user.location,
-                        :timezone => user.time_zone,
-                        :statuses => user.statuses_count,
-                        :followers => user.followers_count,
-                        :friends => user.friends_count,
+                        :loc => result.user.location,
+                        :timezone => result.user.time_zone,
+                        :statuses => result.user.statuses_count,
+                        :followers => result.user.followers_count,
+                        :friends => result.user.friends_count,
                         :source => source,
                         :lat => lat,
                         :lon => lon,
