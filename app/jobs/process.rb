@@ -90,10 +90,10 @@ class ProcessJob
         lat = tweet_loc.latitude
         lon = tweet_loc.longitude
       else # look for location in db, create as appropriate
-        if user.location.nil?
+        if result.user.location.nil?
           next
         end
-        sanitized = user.location.gsub(/[^0-9A-Za-z]/, '')
+        sanitized = result.user.location.gsub(/[^0-9A-Za-z]/, '')
         search_query = Location.search(sanitized)
         if search_query.empty? # new query
           new_loc = Location.new(:address => sanitized)
