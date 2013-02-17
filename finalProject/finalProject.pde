@@ -85,11 +85,22 @@ void setup() {
   button[3] = plot_y2;
   
   // filling the screen a bit.
+  // VISUALIZE.html
+  /*
   String jid = param("jid");
   for (City c:loadCitiesFromServer(jid)) {
     smooth();
     cities.add(c);
   }
+  */
+
+  // SAMPLE.html
+  String inputs = "3fac98f0cd71012f33023c07542f2f9a.csv";
+  for (City c:loadCitiesFromNewCsv(inputs)) {
+    smooth();
+    cities.add(c);
+  }
+
   noStroke();
 }
 

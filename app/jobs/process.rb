@@ -43,7 +43,14 @@ class ProcessJob
         end
       end
       results.concat(q)
-      max = q[-1].id - 1
+
+      # handle max for pagination
+      if q[-1].nil?
+        failed('no results were found.')
+        return
+      else
+        max = q[-1].id - 1
+      end
     end
 
     # if no results, return message
