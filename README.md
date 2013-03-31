@@ -1,5 +1,5 @@
 ## Overview
-This app is a combination of Ruby on Rails and Processing. It currently lives at: http://www.tweetography.com
+This app is a combination of Ruby on Rails and Processing. It currently lives at: http://tweetography.herokuapp.com
 
 ## Local Setup
 Ruby 1.9.3p125 / Rails 3.2.3
